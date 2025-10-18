@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPing - Never Miss a Job Posting Again</title>
+    <meta name="description" content="Monitor LinkedIn, Indeed, Glassdoor and more. Get instant alerts when new jobs post. Be first to apply.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0066ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo::before {
+            content: "📍";
+            font-size: 28px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            color: #111827;
+        }
+        
+        .hero .highlight {
+            color: #0066ff;
+            position: relative;
+        }
+        
+        .hero p {
+            font-size: 24px;
+            color: #6b7280;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .platform-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .platform-badge {
+            background: #f3f4f6;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #4b5563;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .platform-badge::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: 700;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #0066ff;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        
+        /* Email Form */
+        .email-section {
+            background: linear-gradient(135deg, #0066ff 0%, #0047b3 100%);
+            padding: 60px 0;
+            margin: 60px 0;
+        }
+        
+        .email-section h2 {
+            color: white;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        
+        .email-section p {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        
+        .email-form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .email-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 18px 24px;
+            font-size: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        .email-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .cta-button {
+            padding: 18px 40px;
+            background: white;
+            color: #0066ff;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid rgba(16, 185, 129, 0.5);
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .trust-badge {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+        
+        .problem h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+        
+        .problem-subtitle {
+            text-align: center;
+            font-size: 20px;
+            color: #6b7280;
+            margin-bottom: 60px;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .problem-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        .problem-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .problem-card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+        
+        .problem-card p {
+            color: #6b7280;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 80px 0;
+        }
+        
+        .solution h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #111827;
+        }
+        
+        .solution-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            position: relative;
+            text-align: center;
+        }
+        
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0066ff 0%, #0047b3 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 auto 24px;
+        }
+        
+        .step h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+        
+        .step p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+        
+        /* Features */
+        .features {
+            padding: 80px 0;
+            background: #f9fafb;
+        }
+        
+        .features h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #111827;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+        
+        .feature-card p {
+            color: #6b7280;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        /* Pricing */
+        .pricing {
+            padding: 80px 0;
+        }
+        
+        .pricing h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #111827;
+        }
+        
+        .pricing-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 60px;
+        }
+        
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+        
+        .pricing-card.featured {
+            border-color: #0066ff;
+            background: linear-gradient(135deg, #f0f6ff 0%, #e0edff 100%);
+            position: relative;
+        }
+        
+        .pricing-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0066ff;
+            color: white;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .pricing-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+        
+        .price {
+            font-size: 52px;
+            font-weight: 700;
+            color: #0066ff;
+            margin: 20px 0;
+        }
+        
+        .price span {
+            font-size: 20px;
+            color: #6b7280;
+        }
+        
+        .price-note {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        
+        .feature-list {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        .feature-list li {
+            padding: 12px 0;
+            color: #4b5563;
+            list-style: none;
+            position: relative;
+            padding-left: 32px;
+            font-size: 15px;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 700;
+            font-size: 20px;
+        }
+        
+        .pricing-cta {
+            display: inline-block;
+            padding: 16px 40px;
+            background: #0066ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .pricing-cta:hover {
+            background: #0047b3;
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        footer {
+            background: #111827;
+            color: white;
+            padding: 60px 0 30px;
+            text-align: center;
+        }
+        
+        footer p {
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .email-form {
+                flex-direction: column;
+            }
+            
+            .email-input,
+            .cta-button {
+                width: 100%;
+            }
+            
+            .stat-row {
+                gap: 30px;
+            }
+            
+            .problem h2,
+            .solution h2,
+            .features h2,
+            .pricing h2 {
+                font-size: 32px;
+            }
+            
+            .platform-badges {
+                gap: 10px;
+            }
+            
+            .platform-badge {
+                font-size: 13px;
+                padding: 10px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">JobPing</div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Never Miss a <span class="highlight">Job Posting</span> Again</h1>
+            <p>Monitor LinkedIn, Indeed, Glassdoor & more. Get instant alerts when new jobs post. Be first to apply, before hundreds of others.</p>
+            
+            <div class="platform-badges">
+                <div class="platform-badge">LinkedIn</div>
+                <div class="platform-badge">Indeed</div>
+                <div class="platform-badge">Glassdoor</div>
+                <div class="platform-badge">ZipRecruiter</div>
+                <div class="platform-badge">+ More</div>
+            </div>
+            
+            <div class="stat-row">
+                <div class="stat">
+                    <span class="stat-number">&lt;5min</span>
+                    <span class="stat-label">Average alert time</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">5+</span>
+                    <span class="stat-label">Job sites monitored</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Always searching</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="email-section">
+        <div class="container">
+            <h2>Get Early Access</h2>
+            <p>Join 500+ job seekers on the waitlist. Launch in 2 weeks.</p>
+            <form class="email-form" id="waitlistForm">
+                <input type="email" class="email-input" placeholder="Enter your email" required id="emailInput">
+                <button type="submit" class="cta-button">Join Waitlist</button>
+            </form>
+            <div class="success-message" id="successMessage">
+                🎉 You're on the list! We'll email you when we launch.
+            </div>
+            <div class="trust-badge">✓ No spam, ever  •  ✓ First 100 users get 50% off forever</div>
+        </div>
+    </section>
+
+    <section class="problem">
+        <div class="container">
+            <h2>Stop Checking 5 Different Job Sites</h2>
+            <p class="problem-subtitle">You're competing with hundreds of applicants. Being first matters.</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">😫</div>
+                    <h3>Constant Tab Switching</h3>
+                    <p>You check LinkedIn, then Indeed, then Glassdoor, then ZipRecruiter... it's exhausting and time-consuming.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Always Too Late</h3>
+                    <p>By the time you see "Posted 1 day ago," 200 people already applied. Your resume gets buried.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😤</div>
+                    <h3>Jobs You Never See</h3>
+                    <p>Some jobs only post on Indeed. Others only on LinkedIn. You're missing opportunities daily.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution">
+        <div class="container">
+            <h2>How JobPing Works</h2>
+            
+            <div class="solution-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Set Your Criteria</h3>
+                    <p>Tell us what jobs you want: keywords, locations, companies, experience level. Set it once.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>We Monitor Everywhere</h3>
+                    <p>Our system checks LinkedIn, Indeed, Glassdoor, ZipRecruiter and more every few minutes.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Instant Alerts</h3>
+                    <p>Get email/SMS within minutes of posting, across ALL platforms. Apply before the crowd shows up.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>One Tool, All Job Sites</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Multi-Platform Monitoring</h3>
+                    <p>LinkedIn, Indeed, Glassdoor, ZipRecruiter, and more. Stop juggling tabs, we monitor them all.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast Alerts</h3>
+                    <p>Get notified within 5 minutes of jobs posting across any platform. Be in the first 10 applicants.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Smart Filtering</h3>
+                    <p>Set multiple search criteria per platform. Only get alerts for jobs you actually want.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Email & SMS Alerts</h3>
+                    <p>Get notified however you want. Never miss an opportunity even when offline.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Unified Dashboard</h3>
+                    <p>See all job alerts in one place. Track which jobs you've applied to across all platforms.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Safe & Private</h3>
+                    <p>We monitor job boards, not your accounts. No logins required. Your data stays secure.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing">
+        <div class="container">
+            <h2>Simple Pricing</h2>
+            <p class="pricing-subtitle">No contracts. Cancel anytime. 14-day money-back guarantee.</p>
+            
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">$15<span>/mo</span></div>
+                    <p class="price-note">Perfect for focused job searches</p>
+                    <ul class="feature-list">
+                        <li>LinkedIn + Indeed monitoring</li>
+                        <li>3 job search queries</li>
+                        <li>Email alerts</li>
+                        <li>Check every 30 minutes</li>
+                        <li>Basic dashboard</li>
+                        <li>Application tracker</li>
+                    </ul>
+                    <a href="#waitlist" class="pricing-cta">Get Started</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Most Popular</div>
+                    <h3>Pro</h3>
+                    <div class="price">$25<span>/mo</span></div>
+                    <p class="price-note">For serious job seekers</p>
+                    <ul class="feature-list">
+                        <li>ALL platforms (5+ job sites)</li>
+                        <li>10 job search queries</li>
+                        <li>Email + SMS alerts</li>
+                        <li>Check every 10 minutes</li>
+                        <li>Advanced dashboard</li>
+                        <li>Application tracker</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#waitlist" class="pricing-cta">Get Started</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Premium</h3>
+                    <div class="price">$35<span>/mo</span></div>
+                    <p class="price-note">Maximum coverage</p>
+                    <ul class="feature-list">
+                        <li>ALL platforms + niche sites</li>
+                        <li>Unlimited job queries</li>
+                        <li>Email + SMS alerts</li>
+                        <li>Check every 5 minutes</li>
+                        <li>Advanced dashboard</li>
+                        <li>Application tracker</li>
+                        <li>Priority support</li>
+                        <li>Custom notifications</li>
+                    </ul>
+                    <a href="#waitlist" class="pricing-cta">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="email-section" id="waitlist">
+        <div class="container">
+            <h2>Ready to Stop Missing Opportunities?</h2>
+            <p>Join 500+ job seekers. Launch in 2 weeks. Monitor all major job sites from one place.</p>
+            <form class="email-form" id="waitlistForm2">
+                <input type="email" class="email-input" placeholder="Enter your email" required id="emailInput2">
+                <button type="submit" class="cta-button">Join Waitlist</button>
+            </form>
+            <div class="success-message" id="successMessage2">
+                🎉 You're on the list! We'll email you when we launch.
+            </div>
+            <div class="trust-badge">✓ First 100 users get 50% off for life  •  ✓ 14-day money-back guarantee</div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 JobPing. One tool. All job sites. Zero missed opportunities.</p>
+            <p style="margin-top: 20px; font-size: 14px;">Built by job seekers, for job seekers.</p>
+        </div>
+    </footer>
+
+    <script>
+        function handleSubmit(formId, successId, inputId) {
+            const form = document.getElementById(formId);
+            const successMessage = document.getElementById(successId);
+            const emailInput = document.getElementById(inputId);
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = emailInput.value;
+                
+                // Here you would send to your backend or email service
+                // For now, just show success message
+                console.log('Email submitted:', email);
+                
+                // You can integrate with:
+                // - Google Forms (free)
+                // - Mailchimp API
+                // - ConvertKit
+                // - Tally.so
+                // - Your own backend
+                
+                successMessage.classList.add('show');
+                emailInput.value = '';
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 5000);
+            });
+        }
+        
+        // Initialize both forms
+        handleSubmit('waitlistForm', 'successMessage', 'emailInput');
+        handleSubmit('waitlistForm2', 'successMessage2', 'emailInput2');
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
